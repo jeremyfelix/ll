@@ -1,0 +1,14 @@
+[package]
+name = "ll"
+version = "0.1.0"
+edition = "2021"
+description = "ls -l wrapper that inserts thousands separators into the size column"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
