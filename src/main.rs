@@ -17,7 +17,7 @@ Runs `ls -l` (plus LL_OPTS, plus your arguments) and inserts ',' thousands
 separators into the size column. All arguments are passed to ls.
 
 Environment:
-  LL_LS         ls program to run (default: ls; on macOS uls, gls, then ls)
+  LL_LS         ls program to run (default: ls; on macOS uu-ls, uls, gls, then ls)
   LL_OPTS       extra whitespace-separated options placed after -l
   LL_LS_FLAVOR  force ls flavor detection: gnu, uutils or bsd
 
@@ -41,7 +41,7 @@ fn choose_ls() -> OsString {
         }
     }
     if cfg!(target_os = "macos") {
-        for name in ["uls", "gls", "ls"] {
+        for name in ["uu-ls", "uls", "gls", "ls"] {
             if let Some(p) = find_in_path(name) {
                 return p.into_os_string();
             }

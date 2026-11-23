@@ -4,8 +4,10 @@
 thousands separators into the file-size column (`1234567` becomes `1,234,567`).
 
 It replicates GNU coreutils `ls --block-size="'1"`, which the Rust uutils `ls`
-(now the default on recent Ubuntu) and BSD/macOS `ls` do not support. The
-separator is always `,`, regardless of locale. Columns are re-aligned, `total`
+(now the default on recent Ubuntu) does not support. macOS `ls` has `-,`, but
+like GNU it takes the separator from the locale, so it does nothing in the C
+locale and gives `.` in many others. `ll` always uses `,`, regardless of
+locale, and works the same with every `ls` it wraps. Columns are re-aligned, `total`
 lines are grouped too, and everything else is passed through untouched.
 
 ## Install
@@ -38,7 +40,7 @@ if `CLICOLOR` is set, `CLICOLOR_FORCE=1`.
 
 | Variable | Meaning |
 | --- | --- |
-| `LL_LS` | `ls` program to run. Default `ls`; on macOS the first of `uls`, `gls`, `ls` found in `PATH`. |
+| `LL_LS` | `ls` program to run. Default `ls`; on macOS the first of `uu-ls` (Homebrew uutils-coreutils), `uls`, `gls`, `ls` found in `PATH`. |
 | `LL_OPTS` | Whitespace-separated options inserted after `-l` and before your arguments. |
 | `LL_LS_FLAVOR` | Force flavor detection: `gnu`, `uutils` or `bsd`. Otherwise `ls --version` is inspected. |
 
@@ -53,9 +55,9 @@ uutils `ls` understand `-v` and `--group-directories-first`; stock macOS BSD
 
 ```fish
 # ~/.config/fish/config.fish
-# ll uses uls/gls on macOS when present, otherwise ls; only GNU/uutils ls
+# ll uses uu-ls/uls/gls on macOS when present, otherwise ls; only GNU/uutils ls
 # understand these options.
-if command -q uls; or command -q gls; or ls --version >/dev/null 2>&1
+if command -q uu-ls; or command -q uls; or command -q gls; or ls --version >/dev/null 2>&1
     set -gx LL_OPTS "-v --group-directories-first"
 end
 ```
