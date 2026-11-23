@@ -60,7 +60,23 @@ if command -q uls; or command -q gls; or ls --version >/dev/null 2>&1
 end
 ```
 
-Then delete the old `ll` fish function, or it will shadow the binary.
+Fish also ships a built-in `ll` function (`ls -lh`), and any `ll` function
+shadows the binary. The built-in is loaded lazily the first time you type
+`ll`, so `functions -e ll` in `config.fish` does not get rid of it. Instead,
+define your own `ll` in `~/.config/fish/functions/ll.fish`. That directory is
+searched before fish's built-in functions, and the function hands off to the
+binary:
+
+```fish
+# ~/.config/fish/functions/ll.fish
+function ll --wraps=ls --description "ls -l with thousands separators"
+    command ll $argv
+end
+```
+
+`command ll` skips functions and runs the `ll` binary on `PATH`; `--wraps=ls`
+keeps `ls` tab completion. This file replaces any older `ll` fish function, so
+delete that one. Check with `type ll`.
 
 ## Development
 
